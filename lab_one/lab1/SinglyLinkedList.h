@@ -20,16 +20,16 @@ public:
 	SinglyLinkedList();
 	~SinglyLinkedList();
 
-	void push_back(T data);
-	void push_front(T data);
+	void push_back(const T data);
+	void push_front(const T data);
 	T pop_back();
 	T pop_front();
-	void insert(int index, T data);
-	T at(int index);
-	T remove(int index);
+	void insert(const int index, const T data);
+	T at(const int index);
+	T remove(const int index);
+	void set(const int index, const T data);
 	int get_size();
 	void clear();
-	void set(int index, T data);
 	bool isEmpty();
 
 	template <class U>
@@ -46,10 +46,11 @@ SinglyLinkedList<T>::SinglyLinkedList()
 template<class T>
 inline SinglyLinkedList<T>::~SinglyLinkedList()
 {
+	clear();
 }
 
 template<class T>
-void SinglyLinkedList<T>::push_back(T data)
+void SinglyLinkedList<T>::push_back(const T data)
 {
 	Node* newNode = new Node(data);
 
@@ -67,7 +68,7 @@ void SinglyLinkedList<T>::push_back(T data)
 }
 
 template<class T>
-void SinglyLinkedList<T>::push_front(T data)
+void SinglyLinkedList<T>::push_front(const T data)
 {
 	Node* newNode = new Node(data);
 	newNode->next = first;
@@ -80,42 +81,50 @@ template<class T>
 T SinglyLinkedList<T>::pop_back()
 {
 	if (isEmpty())
-		throw out_of_range("");
+		throw out_of_range("List empty");
 
+	T deletedData;
 	if (length > 1)
 	{
 		Node* prevLastNode;
 		for (prevLastNode = first; prevLastNode->next->next != nullptr; prevLastNode = prevLastNode->next);
+		deletedData = prevLastNode->next->data;
 		delete prevLastNode->next;
 		prevLastNode->next = nullptr;
 	}
 	else
 	{
+		deletedData = first->data;
 		delete first;
 		first = nullptr;
 	}
 
 	length--;
+
+	return deletedData;
 }
 
 template<class T>
 T SinglyLinkedList<T>::pop_front()
 {
 	if (isEmpty())
-		throw out_of_range("");
+		throw out_of_range("List empty");
 
 	Node* firstNode = first;
 	first = first->next;
+	T deletedData = firstNode->data;
 	delete firstNode;
 
 	length--;
+
+	return deletedData;
 }
 
 template<class T>
-void SinglyLinkedList<T>::insert(int index, T data)
+void SinglyLinkedList<T>::insert(const int index, const T data)
 {
 	if ((index < 0 || index >= length) && index != 0)
-		throw out_of_range("");
+		throw out_of_range("Index is greater than list size");
 
 	if (index == 0)
 		push_front(data);
@@ -123,8 +132,8 @@ void SinglyLinkedList<T>::insert(int index, T data)
 	{
 		Node* newNode = new Node(data);
 
-		Node* currNode;
-		for (int i = 0, currNode = first; i + 1 != index; i++, currNode = currNode->next);
+		Node* currNode = first;
+		for (int i = 0; i + 1 != index; i++, currNode = currNode->next);
 
 		newNode->next = currNode->next;
 		currNode->next = newNode;
@@ -134,35 +143,38 @@ void SinglyLinkedList<T>::insert(int index, T data)
 }
 
 template<class T>
-T SinglyLinkedList<T>::at(int index)
+T SinglyLinkedList<T>::at(const int index)
 {
 	if (index < 0 || index >= length)
-		throw out_of_range("");
+		throw out_of_range("Index is greater than list size");
 
-	Node* currNode;
-	for (int i = 0, currNode = first; i != index; i++, currNode = currNode->next);
+	Node* currNode = first;
+	for (int i = 0; i != index; i++, currNode = currNode->next);
 
 	return currNode->data;
 }
 
 template<class T>
-T SinglyLinkedList<T>::remove(int index)
+T SinglyLinkedList<T>::remove(const int index)
 {
 	if (index < 0 || index >= length)
-		throw out_of_range("");
+		throw out_of_range("Index is greater than list size");
 
 	if (index == 0)
 		return pop_front();
 	else
 	{
-		Node* currNode;
-		for (int i = 0, currNode = first; i + 1 != index; i++, currNode = currNode->next);
+		Node* currNode = first;
+		for (int i = 0; i + 1 != index; i++, currNode = currNode->next);
 
 		Node* nodeToDelete = currNode->next;
 		currNode->next = nodeToDelete->next;
+		T deletedData = nodeToDelete->data;
 		delete nodeToDelete;
 
 		length--;
+
+		return deletedData;
 	}
 }
 
@@ -185,16 +197,18 @@ void SinglyLinkedList<T>::clear()
 		delete currNode;
 		currNode = nextNode;
 	} while (currNode != nullptr);
+
+	length = 0;
 }
 
 template<class T>
-void SinglyLinkedList<T>::set(int index, T data)
+void SinglyLinkedList<T>::set(const int index, const T data)
 {
 	if (index < 0 || index >= length)
-		throw out_of_range("");
+		throw out_of_range("Index is greater than list size");
 
-	Node* currNode;
-	for (int i = 0, currNode = first; i != index; i++, currNode = currNode->next);
+	Node* currNode = first;
+	for (int i = 0; i != index; i++, currNode = currNode->next);
 
 	currNode->data = data;
 }
