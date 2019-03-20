@@ -57,7 +57,7 @@ void SinglyLinkedList<T>::push_back(const T data)
 	if (!isEmpty())
 	{
 		Node* lastNode;
-		for (lastNode = first; lastNode->next != nullptr; lastNode = lastNode->next);
+		for (lastNode = first; lastNode->next != nullptr; lastNode = lastNode->next); // search for the last node
 
 		lastNode->next = newNode;
 	}
@@ -87,7 +87,7 @@ T SinglyLinkedList<T>::pop_back()
 	if (length > 1)
 	{
 		Node* prevLastNode;
-		for (prevLastNode = first; prevLastNode->next->next != nullptr; prevLastNode = prevLastNode->next);
+		for (prevLastNode = first; prevLastNode->next->next != nullptr; prevLastNode = prevLastNode->next); // search for node that in front of last node
 		deletedData = prevLastNode->next->data;
 		delete prevLastNode->next;
 		prevLastNode->next = nullptr;
@@ -123,7 +123,7 @@ T SinglyLinkedList<T>::pop_front()
 template<class T>
 void SinglyLinkedList<T>::insert(const int index, const T data)
 {
-	if ((index < 0 || index >= length) && index != 0)
+	if ((index < 0 || index >= length) && index != 0) // if length of list equal zero we insert new node 
 		throw out_of_range("Index is greater than list size");
 
 	if (index == 0)
@@ -133,7 +133,7 @@ void SinglyLinkedList<T>::insert(const int index, const T data)
 		Node* newNode = new Node(data);
 
 		Node* currNode = first;
-		for (int i = 0; i + 1 != index; i++, currNode = currNode->next);
+		for (int i = 0; i + 1 != index; i++, currNode = currNode->next); // search for node that located on (index - 1) position in list
 
 		newNode->next = currNode->next;
 		currNode->next = newNode;
@@ -149,7 +149,7 @@ T SinglyLinkedList<T>::at(const int index)
 		throw out_of_range("Index is greater than list size");
 
 	Node* currNode = first;
-	for (int i = 0; i != index; i++, currNode = currNode->next);
+	for (int i = 0; i != index; i++, currNode = currNode->next); // search for node that located on (index) position in list
 
 	return currNode->data;
 }
@@ -165,7 +165,7 @@ T SinglyLinkedList<T>::remove(const int index)
 	else
 	{
 		Node* currNode = first;
-		for (int i = 0; i + 1 != index; i++, currNode = currNode->next);
+		for (int i = 0; i + 1 != index; i++, currNode = currNode->next); // search for node that located on (index - 1) position in list
 
 		Node* nodeToDelete = currNode->next;
 		currNode->next = nodeToDelete->next;
@@ -198,6 +198,8 @@ void SinglyLinkedList<T>::clear()
 		currNode = nextNode;
 	} while (currNode != nullptr);
 
+	first = nullptr;
+
 	length = 0;
 }
 
@@ -208,7 +210,7 @@ void SinglyLinkedList<T>::set(const int index, const T data)
 		throw out_of_range("Index is greater than list size");
 
 	Node* currNode = first;
-	for (int i = 0; i != index; i++, currNode = currNode->next);
+	for (int i = 0; i != index; i++, currNode = currNode->next); // search for node that located on (index) position in list
 
 	currNode->data = data;
 }
